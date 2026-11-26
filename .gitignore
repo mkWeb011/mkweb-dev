@@ -1,1 +1,22 @@
-node_modules
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# Sanity
+studio/dist/
+studio/.sanity/
+
+# env files — never commit secrets
+.env
+.env.local
+.env.*.local
+
+# misc
+.DS_Store
+*.log
+coverage/
+.netlify/
