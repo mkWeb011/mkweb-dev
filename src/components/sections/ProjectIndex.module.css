@@ -1,0 +1,134 @@
+.section {
+  padding: clamp(60px, 10vh, 120px) var(--pad);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 26px 0 30px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 8px 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--ink-2);
+  transition:
+    background 0.35s var(--ease),
+    color 0.35s,
+    border-color 0.35s;
+}
+
+.chip sup {
+  font-family: var(--f-mono);
+  font-size: 9px;
+  opacity: 0.7;
+  line-height: 1.2;
+}
+
+.chip:hover {
+  color: var(--ink);
+  border-color: var(--ink-2);
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+.head,
+.row {
+  display: grid;
+  grid-template-columns: 48px minmax(160px, 1.1fr) 2fr minmax(140px, 0.8fr) 24px;
+  gap: 20px;
+  align-items: baseline;
+}
+
+.head {
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.row {
+  position: relative;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.row::before {
+  content: '';
+  position: absolute;
+  inset: 0 calc(var(--pad) * -1);
+  background: linear-gradient(90deg, rgba(20, 110, 245, 0.12), rgba(20, 110, 245, 0.02) 70%);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.5s var(--ease);
+  z-index: -1;
+}
+
+.row:hover::before,
+.row:focus-visible::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+.name {
+  font-size: clamp(19px, 1.6vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  transition: transform 0.5s var(--ease);
+}
+
+.row:hover .name {
+  transform: translateX(8px);
+}
+
+.what {
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+
+.arrow {
+  justify-self: end;
+  transition: transform 0.5s var(--ease);
+}
+
+.row:hover .arrow {
+  transform: translateX(4px) rotate(-45deg);
+}
+
+@media (max-width: 860px) {
+  .head {
+    display: none;
+  }
+  .row {
+    grid-template-columns: 36px 1fr 20px;
+    gap: 4px 12px;
+  }
+  .row > :nth-child(1) {
+    grid-row: 1 / 4;
+  }
+  .name,
+  .what,
+  .platform {
+    grid-column: 2;
+  }
+  .what {
+    font-size: 14px;
+  }
+  .platform {
+    margin-top: 6px;
+  }
+  .arrow {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
