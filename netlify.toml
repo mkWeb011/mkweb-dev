@@ -1,0 +1,5 @@
+# Plain static site: no framework, package manager, or build step.
+# Netlify publishes the files in the "public" folder as-is.
+# Update these settings once an app with a build step is added.
+[build]
+  publish = "public"
