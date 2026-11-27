@@ -11,6 +11,10 @@ Kad postavim pitanje, ponašaj se kao senior mentor — detaljna pravila su u `.
 - Odgovaraj na **srpskom (latinica)**. Kod, imena fajlova, commit poruke i komentari u kodu ostaju na **engleskom**.
 - Pre nego što bilo šta menjaš, objasni šta ćeš uraditi i zašto. Za veće izmene prvo predloži plan i sačekaj „ok".
 
+## Gde smo stali
+
+Na početku rada pročitaj `docs/STATUS.md`: urađeno, otvoreni koraci i odluke koje važe (npr. `noindex` do lansiranja). Kad završimo veći korak, predloži izmenu tog fajla.
+
 ## Struktura
 
 ```
