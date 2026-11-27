@@ -1,0 +1,31 @@
+// Cloudflare Workers configuration for mkweb-dev.com
+// Docs: https://developers.cloudflare.com/workers/static-assets/
+{
+  // Must match the Worker name in the Cloudflare dashboard, or Workers Builds fails.
+  "name": "mkweb-dev",
+  "compatibility_date": "2026-11-01",
+
+  // The Worker script — runs only for /api/* (see run_worker_first).
+  "main": "./worker/index.ts",
+
+  "assets": {
+    // `next build` (output: 'export') writes the whole site here.
+    "directory": "./out",
+    "binding": "ASSETS",
+    // /work/zignify → /work/zignify/ (matches trailingSlash: true in next.config.ts)
+    "html_handling": "auto-trailing-slash",
+    // Unknown URL → out/404.html with status 404 (Next's not-found page).
+    "not_found_handling": "404-page",
+    // Static files never wake the Worker (free + unlimited); only the API does.
+    "run_worker_first": ["/api/*"]
+  },
+
+  // Non-secret settings. The Resend key is a SECRET: set it in the dashboard
+  // (Worker → Settings → Variables and Secrets) or with `npx wrangler secret put RESEND_API_KEY`.
+  "vars": {
+    "INQUIRY_TO": "mk011web@gmail.com",
+    "INQUIRY_FROM": "mkweb-dev <inquiry@mkweb-dev.com>"
+  },
+
+  "observability": { "enabled": true }
+}

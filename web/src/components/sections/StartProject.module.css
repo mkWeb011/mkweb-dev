@@ -1,0 +1,470 @@
+/* ==========================================================
+   START A PROJECT — editorial multi-step brief
+   Rows and hairlines echo the project index; the blue accent
+   marks only what the user has chosen or where they are.
+   ========================================================== */
+
+.start {
+  padding: clamp(80px, 14vh, 160px) var(--pad);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+  margin-top: clamp(36px, 7vh, 72px);
+}
+
+/* ---- Rail (left) ------------------------------------------------------ */
+.rail {
+  grid-column: 1 / 5;
+  align-self: start;
+  position: sticky;
+  top: 110px;
+  display: grid;
+  gap: 36px;
+}
+.lead {
+  max-width: 34ch;
+  font-size: var(--fs-m);
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+.steps {
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+.stepItem {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 14px 0 14px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-m);
+  color: var(--ink-3);
+  transition: color 0.5s var(--ease);
+}
+.stepItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 2px;
+  background: var(--grad-accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.6s var(--ease);
+}
+.stepItem[data-state='now'] {
+  color: var(--ink);
+}
+.stepItem[data-state='now']::before {
+  transform: scaleY(1);
+}
+.stepItem[data-state='done'] {
+  color: var(--ink-2);
+}
+.stepItem[data-state='done'] .mono::after {
+  content: ' ✓';
+  color: var(--blue-2);
+}
+.alt,
+.altMobile {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+.altMobile {
+  display: none;
+}
+
+/* ---- Form (right) ----------------------------------------------------- */
+.form {
+  grid-column: 6 / 13;
+  position: relative;
+  min-width: 0;
+}
+.honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.progress {
+  height: 1px;
+  background: var(--line);
+  margin-bottom: clamp(28px, 5vh, 48px);
+}
+.progress i {
+  display: block;
+  height: 100%;
+  background: var(--grad-accent);
+  transform-origin: left;
+  transition: transform 0.8s var(--ease);
+}
+
+.step {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+  display: grid;
+  gap: clamp(30px, 5vh, 48px);
+}
+.step[hidden] {
+  display: none;
+}
+/* Without JS all steps are stacked — separate them clearly. */
+.step + .step {
+  margin-top: clamp(60px, 10vh, 100px);
+}
+.step[data-active] {
+  margin-top: 0;
+  animation: stepIn 0.7s var(--ease) both;
+}
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+.legend {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  /* A <legend> is not a grid item of its fieldset, so the gap needs a margin. */
+  padding-bottom: clamp(18px, 3vh, 28px);
+  outline-offset: 8px;
+  /* Focus lands here on every step change — keep it clear of the fixed header. */
+  scroll-margin-top: 120px;
+}
+.stepTitle {
+  font-size: var(--fs-l);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+.stepTitle :global(.serif) {
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: 0.06em;
+}
+
+/* ---- Option groups ---------------------------------------------------- */
+.group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.label {
+  display: block;
+  padding: 0;
+  font-family: var(--f-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.optional {
+  color: var(--ink-3);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.hint {
+  margin-top: 6px;
+  font-size: var(--fs-s);
+  color: var(--ink-3);
+}
+.options {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 1px solid var(--line);
+}
+.options[data-many] {
+  grid-template-columns: 1fr 1fr;
+  column-gap: 28px;
+}
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 4px 16px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  transition:
+    padding 0.5s var(--ease),
+    color 0.3s;
+}
+.option input {
+  /* Visually hidden but still focusable and announced. */
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+.option:hover {
+  padding-left: 10px;
+}
+.option:has(input:focus-visible) {
+  outline: 1px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.optionText {
+  display: grid;
+  gap: 2px;
+  font-size: var(--fs-m);
+  letter-spacing: -0.01em;
+}
+.note {
+  font-size: var(--fs-s);
+  color: var(--ink-3);
+}
+.tick {
+  flex: none;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--line-2);
+  border-radius: 50%;
+  transition:
+    background 0.35s var(--ease),
+    border-color 0.35s;
+}
+.tick::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.35s var(--ease);
+}
+.option[data-checked] .tick {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+.option[data-checked] .tick::after {
+  transform: rotate(45deg) scale(1);
+}
+.option[data-checked] .optionText > span:first-child {
+  color: var(--blue-3);
+}
+
+/* ---- Text fields ------------------------------------------------------ */
+.textField {
+  display: grid;
+}
+.input {
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px 0 14px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line-2);
+  border-radius: 0;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--fs-m);
+  transition: border-color 0.3s;
+}
+textarea.input {
+  resize: vertical;
+  min-height: 140px;
+  line-height: 1.5;
+}
+.input:focus {
+  outline: none;
+  border-bottom-color: var(--blue-2);
+}
+.input:focus-visible {
+  outline: none;
+  box-shadow: 0 1px 0 0 var(--blue-2);
+}
+.input[aria-invalid='true'] {
+  border-bottom-color: #ff8f8f;
+}
+.fieldError {
+  margin-top: 8px;
+  color: #ff9d9d;
+  font-size: var(--fs-s);
+}
+
+/* ---- Actions ---------------------------------------------------------- */
+.actions {
+  margin-top: clamp(36px, 6vh, 56px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+.primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 26px;
+  border-radius: 999px;
+  background: var(--grad-accent);
+  color: #fff;
+  font-size: clamp(16px, 1.2vw, 19px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition:
+    filter 0.3s,
+    transform 0.5s var(--ease);
+}
+.primary:hover {
+  filter: brightness(1.12);
+}
+.primary span {
+  display: inline-block;
+  transition: transform 0.5s var(--ease);
+}
+.primary:hover span {
+  transform: translateX(5px);
+}
+.primary:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.error {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 143, 143, 0.4);
+  border-radius: 8px;
+  color: #ffc4c4;
+}
+.error a {
+  border-bottom: 1px solid currentColor;
+}
+
+/* ---- Done ------------------------------------------------------------- */
+.done {
+  grid-column: 6 / 13;
+  display: grid;
+  gap: 22px;
+  align-content: start;
+  animation: stepIn 0.8s var(--ease) both;
+}
+.done h3 {
+  scroll-margin-top: 120px;
+  font-size: var(--fs-l);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  outline-offset: 8px;
+}
+.done p {
+  max-width: 46ch;
+  font-size: var(--fs-m);
+  color: var(--ink-2);
+}
+.summary {
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+.summary div {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 2fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.summary dt {
+  color: var(--ink-3);
+}
+
+/* ---- Responsive ------------------------------------------------------- */
+@media (max-width: 1000px) {
+  .rail {
+    grid-column: 1 / 6;
+  }
+  .form,
+  .done {
+    grid-column: 7 / 13;
+  }
+  .options[data-many] {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+  .rail {
+    position: static;
+    grid-column: auto;
+    gap: 24px;
+  }
+  /* On phones the rail becomes a compact horizontal stepper. */
+  .steps {
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 0;
+  }
+  .stepItem {
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 0 0;
+    border-bottom: 0;
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-s);
+  }
+  .stepItem::before {
+    left: 0;
+    right: 0;
+    top: -1px;
+    bottom: auto;
+    width: auto;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .stepItem[data-state='now']::before {
+    transform: scaleX(1);
+  }
+  .form,
+  .done {
+    grid-column: auto;
+  }
+  .alt,
+  .progress {
+    display: none; /* the stepper above already shows progress */
+  }
+  .altMobile {
+    display: grid;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .option:hover {
+    padding-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step[data-active],
+  .done {
+    animation: none;
+  }
+  .progress i,
+  .stepItem::before,
+  .option,
+  .tick,
+  .tick::after {
+    transition: none;
+  }
+}
