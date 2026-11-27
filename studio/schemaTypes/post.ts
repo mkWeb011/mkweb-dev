@@ -62,7 +62,7 @@ export const post = defineType({
   orderings: [{ title: 'Newest first', name: 'publishedDesc', by: [{ field: 'publishedAt', direction: 'desc' }] }],
   preview: {
     select: { title: 'title', date: 'publishedAt', media: 'mainImage' },
-    prepare: ({ title, date, media }: { title?: string; date?: string; media?: unknown }) => ({
+    prepare: ({ title, date, media }) => ({
       title,
       subtitle: date ? new Date(date).toLocaleDateString('en-GB') : 'Not published',
       media,

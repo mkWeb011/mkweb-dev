@@ -3,6 +3,13 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/), versions: [SemVer](https://semver.org/).
 
+## [1.4.1] — 2026-11-27
+
+### Fixed
+- CI lint (eslint-plugin-react-hooks 7): `navigate` declared before use in Menu; the SelectedWork hover preview no longer passes refs through `contextSafe` during render; StartProject reads `enhanced` via `useSyncExternalStore` instead of setState in an effect; the Lenis setState is documented as an external-system sync.
+- Worker default export assigned to a named const; seed script logs via stdout.
+- Studio typecheck: added `@types/node`; preview `prepare` relies on Sanity's own types.
+
 ## [1.4.0] — 2026-11
 
 ### Changed

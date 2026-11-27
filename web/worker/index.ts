@@ -44,7 +44,7 @@ export type SendEmail = (email: Email, env: Env) => Promise<void>;
 /** Anything bigger than this is not a project brief. */
 const MAX_BODY_BYTES = 32 * 1024;
 
-export default {
+const worker = {
   async fetch(request: Request, env: Env): Promise<Response> {
     const { pathname } = new URL(request.url);
     if (pathname === '/api/inquiry' || pathname === '/api/inquiry/') {
@@ -58,6 +58,8 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+export default worker;
 
 /**
  * The whole request → response flow. `send` is injectable so tests can

@@ -49,5 +49,5 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   mkdirSync(dirname(out), { recursive: true });
   // JSON.stringify drops `undefined` fields → empty optional fields are simply absent.
   writeFileSync(out, projects.map((p, i) => JSON.stringify(toSanityDocument(p, i))).join('\n') + '\n');
-  console.log(`Wrote ${projects.length} projects → ${out}`);
+  process.stdout.write(`Wrote ${projects.length} projects → ${out}\n`);
 }

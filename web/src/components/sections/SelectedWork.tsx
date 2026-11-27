@@ -20,8 +20,7 @@ export function SelectedWork({ projects }: { projects: Project[] }) {
   const scope = useRef<HTMLElement>(null);
 
   // useGSAP = useEffect + automatic cleanup of every tween created inside.
-  // contextSafe wraps event handlers so their tweens are cleaned up too.
-  const { contextSafe } = useGSAP(
+  useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add(MQ.finePointer, () => {
@@ -37,17 +36,29 @@ export function SelectedWork({ projects }: { projects: Project[] }) {
         window.addEventListener('pointermove', move);
         return () => window.removeEventListener('pointermove', move);
       });
+      const el = previewRef.current;
+      return () => {
+        gsap.killTweensOf(el); // hover tweens are not tracked by useGSAP
+      };
     },
     { scope },
   );
 
-  const show = contextSafe((project: Project) => {
+  // Plain event handlers: they read the ref only when the pointer moves,
+  // never during render. `overwrite` stops overlapping show/hide tweens.
+  function show(project: Project) {
     setActive(project);
-    gsap.to(previewRef.current, { opacity: 1, scale: 1, rotate: gsap.utils.random(-4, 4), duration: 0.6 });
-  });
-  const hide = contextSafe(() => {
-    gsap.to(previewRef.current, { opacity: 0, scale: 0.85, duration: 0.4, ease: 'power3.out' });
-  });
+    gsap.to(previewRef.current, {
+      opacity: 1,
+      scale: 1,
+      rotate: gsap.utils.random(-4, 4),
+      duration: 0.6,
+      overwrite: 'auto',
+    });
+  }
+  function hide() {
+    gsap.to(previewRef.current, { opacity: 0, scale: 0.85, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+  }
 
   return (
     <section className="work" id="work" aria-labelledby="work-h" ref={scope}>

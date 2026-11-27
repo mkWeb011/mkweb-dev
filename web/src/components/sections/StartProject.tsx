@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useId, useRef, useState, useSyncExternalStore, type FormEvent } from 'react';
 import { site } from '@/content/site';
 import { INQUIRY_FORM_NAME, inquirySteps as steps } from '@/content/inquiry';
 import {
@@ -19,6 +19,9 @@ import styles from './StartProject.module.css';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
+/** Nothing to subscribe to: the value only changes from server to client. */
+const noopSubscribe = () => () => {};
+
 /**
  * "Start a project" — a multi-step brief for people who are not ready for a call.
  *
@@ -27,11 +30,13 @@ type Status = 'idle' | 'sending' | 'sent' | 'error';
  *    the browser POSTs to the Worker, which answers with a redirect to /thanks/.
  *  - After hydration (`enhanced`): one step at a time, our own validation,
  *    fetch() to the same endpoint asking for JSON, success screen in place.
- * `enhanced` flips in useEffect, i.e. AFTER hydration, so server and first
+ * `enhanced` comes from useSyncExternalStore: false on the server and during
+ * hydration, true right after, so server and first
  * client render are identical — no hydration mismatch.
  */
 export function StartProject() {
-  const [enhanced, setEnhanced] = useState(false);
+  // false on the server and during hydration, true right after it.
+  const enhanced = useSyncExternalStore(noopSubscribe, () => true, () => false);
   const [current, setCurrent] = useState(0);
   const [values, setValues] = useState<InquiryValues>(() => emptyValues(steps));
   const [errors, setErrors] = useState<InquiryErrors>({});
@@ -42,8 +47,6 @@ export function StartProject() {
   const stepHeadings = useRef<(HTMLLegendElement | null)[]>([]);
   const doneHeading = useRef<HTMLHeadingElement>(null);
   const moved = useRef(false); // skip focusing on the very first render
-
-  useEffect(() => setEnhanced(true), []);
 
   // Move focus to the new step's heading so keyboard and screen-reader
   // users continue from the right place (not from the "Next" button).

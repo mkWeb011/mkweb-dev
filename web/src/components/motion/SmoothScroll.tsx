@@ -51,6 +51,9 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     const raf = (time: number) => instance.raf(time * 1000); // gsap gives seconds
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
+    // Lenis is an external system that exists only in the browser, so it can
+    // only be created here; storing it in state shares it through context.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLenis(instance);
 
     return () => {

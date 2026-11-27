@@ -169,7 +169,7 @@ export const project = defineType({
   orderings: [{ title: 'Site order', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] }],
   preview: {
     select: { title: 'name', order: 'order', featured: 'featured', media: 'cover' },
-    prepare: ({ title, order, featured, media }: { title?: string; order?: number; featured?: boolean; media?: unknown }) => ({
+    prepare: ({ title, order, featured, media }) => ({
       title,
       subtitle: `${order ?? '–'}${featured ? ' · ★ featured' : ''}`,
       media,

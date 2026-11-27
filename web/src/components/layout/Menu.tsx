@@ -35,6 +35,14 @@ export function Menu({ open, onClose, returnFocusTo }: MenuProps) {
   // (Unmounting happens in the exit animation below.)
   if (open && !rendered) setRendered(true);
 
+  // Declared before the effect that calls it (after the exit animation).
+  // An arrow function is not hoisted, so order matters here.
+  const navigate = (href: string) => {
+    const url = new URL(href, window.location.origin);
+    if (url.pathname === pathname && url.hash) scrollToHash(url.hash, lenis);
+    else router.push(href);
+  };
+
   // Enter / exit animation + side effects (scroll lock, focus).
   useEffect(() => {
     const root = rootRef.current;
@@ -116,12 +124,6 @@ export function Menu({ open, onClose, returnFocusTo }: MenuProps) {
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [open, onClose, returnFocusTo]);
-
-  function navigate(href: string) {
-    const url = new URL(href, window.location.origin);
-    if (url.pathname === pathname && url.hash) scrollToHash(url.hash, lenis);
-    else router.push(href);
-  }
 
   function onLinkClick(e: MouseEvent<HTMLAnchorElement>, href: string) {
     e.preventDefault();
